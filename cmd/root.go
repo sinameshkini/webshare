@@ -9,6 +9,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
+	"strings"
 )
 
 var (
@@ -50,6 +52,7 @@ var (
 func init() {
 	banner := figure.NewFigure("WebShare", "", true).String()
 	fmt.Println(banner)
+	fmt.Printf("version: %s \n", getGitVersion())
 	fmt.Println("available on https://github.com/sinameshkini/webshare")
 	rootCmd.Flags().IntVarP(&port, "port", "p", 4242, "Port number")
 	rootCmd.Flags().StringVarP(&path, "dir", "d", ".", "Directory path")
@@ -73,4 +76,30 @@ func getIP() (ip string) {
 	}
 
 	return
+}
+
+func getGitVersion() string {
+	// Get the most recent tag and the current branch
+	tagCmd := exec.Command("git", "describe", "--tags")
+	branchCmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+
+	tagOutput, err := tagCmd.Output()
+	if err != nil {
+		fmt.Println("Error getting Git tag:", err)
+		return ""
+	}
+
+	branchOutput, err := branchCmd.Output()
+	if err != nil {
+		fmt.Println("Error getting Git branch:", err)
+		return ""
+	}
+
+	tag := strings.TrimSpace(string(tagOutput))
+	branch := strings.TrimSpace(string(branchOutput))
+
+	// Construct the version string
+	version := fmt.Sprintf("%s-%s", tag, branch)
+
+	return version
 }
