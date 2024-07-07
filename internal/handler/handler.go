@@ -47,7 +47,7 @@ func Init(e *echo.Echo, readOnly, readWrite string, port int, username, password
 	}
 
 	if readWrite != "" {
-		info, err := os.Stat(readWrite)
+		info, err = os.Stat(readWrite)
 		if err != nil {
 			return err
 		}
@@ -62,16 +62,18 @@ func Init(e *echo.Echo, readOnly, readWrite string, port int, username, password
 		fmt.Printf("Enter this address in other host in local network for upload file: http://%s:%d/w \n", utils.GetIP(), port)
 	}
 
-	e.Static("/", readOnly)
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   readOnly,
-		Browse: true,
-	}))
 	e.GET("/status", func(c echo.Context) error {
 		return c.String(http.StatusOK, "status: running")
 	})
 
-	fmt.Printf("Enter this address in other host in local network: http://%s:%d \n", utils.GetIP(), port)
+	g := e.Group("/r")
+	g.Static("", readOnly)
+	g.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:   readOnly,
+		Browse: true,
+	}))
+
+	fmt.Printf("Enter this address in other host in local network: http://%s:%d/r/ \n", utils.GetIP(), port)
 
 	return nil
 }
@@ -99,7 +101,7 @@ func uploadFile(c echo.Context) error {
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
-		return err
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 	src, err := file.Open()
 	if err != nil {
@@ -119,7 +121,13 @@ func uploadFile(c echo.Context) error {
 		return err
 	}
 
-	return c.HTML(http.StatusOK, "<p>File uploaded successfully!</p>")
+	successMessage := `
+		<p>File uploaded successfully!</p>
+		<form action="/w" method="get">
+			<button type="submit">Go Back</button>
+		</form>`
+
+	return c.HTML(http.StatusOK, successMessage)
 }
 
 func createFile(filename string) (*os.File, error) {
