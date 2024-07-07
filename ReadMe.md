@@ -2,18 +2,17 @@
 
 ## Overview
 
-**WebShare** is a simple and efficient tool for sharing files over HTTP/HTTPS. With WebShare, you can quickly set up a web service to share a directory's contents for reading and writing data. The tool supports basic authentication for secure access, making it ideal for both local network and internet usage.
+**WebShare** is a simple and efficient tool for sharing files over HTTP. With WebShare, you can quickly set up a web service to share a directory's contents for reading and writing data. The tool supports basic authentication for secure access, making it ideal for both local network and internet usage.
 
 ## Features
 
 - **Easy to Use**: Simple command-line interface to start sharing your files.
 - **Cross-Platform**: Works on all major platforms.
-- **HTTP/HTTPS Support**: Share files securely over the web.
 - **Basic Authentication**: Protect your shared directories with basic auth.
 
 ## Installation
 
-To install WebShare, download the executable from the [GitHub Releases](#) page corresponding to your platform.
+To install WebShare, download the executable from the [GitHub Releases](https://github.com/sinameshkini/webshare/releases) page corresponding to your platform.
 
 ## Usage
 
@@ -22,26 +21,23 @@ To install WebShare, download the executable from the [GitHub Releases](#) page 
 To run WebShare, use the following command:
 
 ```shell
-webshare -p <port> -r <path/to/read-only-directory> -rw <path/to/read-write-directory>
+webshare -p <port> -r <path/to/read-only-directory> -w <path/to/read-write-directory>
 ```
 
 ### Command-Line Options
 
 - `-p, --port <port>`: Specify the port to run the web service on (default: 8080).
 - `-r, --readonly <path/to/read-only-directory>`: Set the directory that can be accessed for reading.
-- `-rw, --readwrite <path/to/read-write-directory>`: Set the directory that can be accessed for both reading and writing.
-- `-u, --username <username>`: Set the username for basic authentication.
+- `-w, --readwrite <path/to/read-write-directory>`: Set the directory that can be accessed for both reading and writing.
+- `-U, --username <username>`: Set the username for basic authentication.
 - `-P, --password <password>`: Set the password for basic authentication.
-- `--https`: Enable HTTPS (requires certificate and key files).
-- `--cert <path/to/cert>`: Specify the path to the SSL certificate file.
-- `--key <path/to/key>`: Specify the path to the SSL key file.
 
 ### Example
 
 Running WebShare on port 8080 with a read-only directory and a read-write directory:
 
 ```shell
-webshare -p 8080 -r /path/to/read-only -rw /path/to/read-write -u myusername -P mypassword
+webshare -p 8080 -r /path/to/read-only -w /path/to/read-write -U myusername -P mypassword
 ```
 
 ### Accessing the Web Service
@@ -52,10 +48,41 @@ Once the service is running, you can access the shared directories from any devi
 http://<your-ip>:<port>
 ```
 
-For example, if you are running the service on `localhost` and port `8080`, access it at:
+For example, if you are running the service on `localhost` and port `4242`, access it at:
 
 ```
-http://localhost:8080
+http://localhost:4242
+```
+
+### Preview
+```shell
+$ webshare -h
+ __        __         _       ____    _
+ \ \      / /   ___  | |__   / ___|  | |__     __ _   _ __    ___
+  \ \ /\ / /   / _ \ | '_ \  \___ \  | '_ \   / _` | | '__|  / _ \
+   \ V  V /   |  __/ | |_) |  ___) | | | | | | (_| | | |    |  __/
+    \_/\_/     \___| |_.__/  |____/  |_| |_|  \__,_| |_|     \___|
+
+version: 0.0.2 
+Available on https://github.com/sinameshkini/webshare
+
+        WebShare is a user-friendly application designed for quick and secure file sharing over HTTP/HTTPS. 
+        It allows you to easily set up a web service that provides access to specified directories for both 
+        reading and writing data. With cross-platform compatibility and support for basic authentication, WebShare 
+        ensures that your files can be accessed securely from any device on your local network or over the internet.
+        Whether you need to share files for collaboration or distribute data efficiently,
+        WebShare offers a straightforward solution with minimal setup.
+
+Usage:
+  webshare [flags]
+
+Flags:
+  -h, --help               help for webshare
+  -P, --password string    Set the password for basic authentication.
+  -p, --port int           Specifies the port number on which the web service will run. (default 4242)
+  -r, --readonly string    Set the directory that can be accessed for reading. (default ".")
+  -w, --readwrite string   Set the directory that can be accessed for both reading and writing.
+  -U, --username string    Set the username for basic authentication.
 ```
 
 ## Contributing
